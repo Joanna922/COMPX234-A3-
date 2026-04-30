@@ -42,6 +42,25 @@ def main():
             # X is "R" for READ and "G" for GET.
             # Hint: for READ/GET, size = 6 + len(key). For PUT, size = 7 + len(key) + len(value).
             # Reject lines with invalid format or key+" "+value > 970 chars.
+            if cmd == "READ":
+                key = parts[1]
+                total_len = 6 + len(key)
+                message = f"{total_len:03d} R {key}"
+            elif cmd == "GET":
+                key = parts[1]
+                total_len = 6 + len(key)
+                message = f"{total_len:03d} G {key}"
+            elif cmd == "PUT":
+                key = parts[1]
+                value = parts[2]
+                if len(value) > 999 or len(key + " " + value) > 970:
+                    print(f"{line}: ERR Invalid value length")
+                    continue
+                total_len = 7 + len(key) + len(value)
+                message = f"{total_len:03d} P {key} {value}"
+            else:
+                print(f"{line}: ERR Unknown command")
+                continue
 
 
             # TASK 3: Send the message to the server, then receive the response.
